@@ -117,15 +117,22 @@ void PluginTests::runTest()
     {
         beginTest ("Scan for plugins located in: " + fileOrID);
 
-        callOnMessageThreadAndWait ([&]
+        const auto scan = [&]
         {
             knownPluginList.scanAndAddDragAndDroppedFiles (formatManager, juce::StringArray (fileOrID), typesFound);
-        });
+        };
+
+       #if JUCE_IOS
+        // JUCE must be able to run its async AUv3 instantiation on the main thread.
+        scan();
+       #else
+        callOnMessageThreadAndWait (scan);
+       #endif
 
         logMessage ("Num plugins found: " + juce::String (typesFound.size()));
         expect (! typesFound.isEmpty(),
                 "No types found. This usually means the plugin binary is missing or damaged, "
-                "an incompatible format or that it is an AU that isn't found by macOS so can't be created.");
+                "an incompatible format or an Audio Unit missing from the system registry.");
 
 
         if (typesFound.isEmpty())

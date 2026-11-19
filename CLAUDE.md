@@ -174,6 +174,7 @@ VST2_SDK_DIR=/path/to/vst2sdk cmake -B Builds/Debug .
 - **macOS**: 10.11+ (deployment target), supports Apple Silicon via universal binary
 - **Windows**: MSVC with static runtime linking
 - **Linux**: Ubuntu 22.04+, statically links libstdc++
+- **iOS Simulator**: AUv3-only app targeting iOS 16+. The CMake target reuses `PluginTests` and the strictness 1–3 basic tests on a worker thread. See [the simulator build and run guide](ios-validator/README.md).
 
 ## Architecture
 

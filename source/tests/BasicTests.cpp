@@ -869,6 +869,7 @@ static ParameterThreadSafetyTest parameterThreadSafetyTest;
 
 
 //==============================================================================
+#if ! JUCE_IOS
 /** Runs auval on the plugin if it's an Audio Unit.
  */
 struct AUvalTest    : public PluginTest
@@ -943,6 +944,7 @@ struct AUvalTest    : public PluginTest
 };
 
 static AUvalTest auvalTest;
+#endif
 
 //==============================================================================
 /** Runs Steinberg's validator on the plugin if it's a VST3.

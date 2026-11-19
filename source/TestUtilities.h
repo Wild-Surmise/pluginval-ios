@@ -262,8 +262,8 @@ static std::unique_ptr<juce::AudioProcessorEditor> createAndShowEditorOnMessageT
             editor->setVisible (true);
 
             // Pump the message loop for a couple of seconds for the window to initialise itself
-            // For some reason this blocks on Linux though so we'll avoid doing it
-           #if ! JUCE_LINUX
+            // Desktop Linux can block here. iOS does not support nested message loops.
+           #if ! JUCE_LINUX && ! JUCE_IOS
              juce::MessageManager::getInstance()->runDispatchLoopUntil (200);
            #endif
         }
