@@ -3,6 +3,15 @@ cmake_minimum_required(VERSION 3.15)
 file(STRINGS VERSION CURRENT_VERSION LIMIT_COUNT 1)
 project(pluginval VERSION ${CURRENT_VERSION})
 
+set(PLUGINVAL_JUCE_VERSION 9.0.4)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    include(cmake/CPM.cmake)
+    CPMAddPackage("gh:juce-framework/juce#${PLUGINVAL_JUCE_VERSION}")
+    add_subdirectory(ios-validator)
+    return()
+endif()
+
 # Just compliing pluginval
 if (pluginval_IS_TOP_LEVEL)
     if (APPLE)
@@ -81,7 +90,7 @@ endif()
 
 # Only fetch JUCE when top-level (when used as dependency, JUCE is already available)
 if (pluginval_IS_TOP_LEVEL)
-    CPMAddPackage("gh:juce-framework/juce#9.0.4")
+    CPMAddPackage("gh:juce-framework/juce#${PLUGINVAL_JUCE_VERSION}")
 endif()
 
 
