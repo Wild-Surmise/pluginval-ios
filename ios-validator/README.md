@@ -31,6 +31,9 @@ python3 ios-validator/run-simulator.py "$simulator_id" "$validator" \
   'AudioUnit:Effects/aufx,Glch,Wsrm'
 ```
 
+Pass `--device-set <path>` when the simulator is in a custom CoreSimulator
+device set.
+
 The app writes a JSON report to `Documents/pluginval-result.json`. The wrapper
 prints the report and exits nonzero on a test failure, app exit, or timeout.
 Use [the Swift host probe](../ios-probe/README.md) to check extension discovery

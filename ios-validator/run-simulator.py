@@ -15,8 +15,10 @@ from uuid import uuid4
 BUNDLE = "com.wildsurmise.pluginval-ios"
 
 
-def run(device, app, target, timeout):
+def run(device, app, target, timeout, device_set=None):
     simctl = ["xcrun", "simctl"]
+    if device_set is not None:
+        simctl.extend(["--set", str(device_set)])
     with (app / "Info.plist").open("rb") as file:
         if plistlib.load(file)["CFBundleIdentifier"] != BUNDLE:
             raise ValueError("The app is not the pluginval iOS validator.")
@@ -59,12 +61,13 @@ def main():
     parser.add_argument("device", help="UDID of the booted simulator with the AUv3 installed")
     parser.add_argument("app", type=Path, help="Built pluginval iOS.app")
     parser.add_argument("target", help="A registered AudioUnit: selector")
+    parser.add_argument("--device-set", type=Path, help="CoreSimulator device set containing the device")
     parser.add_argument("--timeout", type=int, default=180, help="Maximum seconds to wait for test results")
     args = parser.parse_args()
     if not args.target.startswith("AudioUnit:") or args.timeout < 1:
         parser.error("Provide an AudioUnit: selector and a positive timeout.")
     try:
-        return run(args.device, args.app, args.target, args.timeout)
+        return run(args.device, args.app, args.target, args.timeout, args.device_set)
     except (KeyError, OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
         print(f"iOS validation failed: {error}", file=sys.stderr)
         return 1
